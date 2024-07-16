@@ -7,7 +7,6 @@ class LoginDialog(object):
     def setupUi(self, Dialog):
         if not Dialog.objectName(): Dialog.setObjectName(u"login_Dialog")
         Dialog.resize(300, 150)
-        Dialog.setWindowTitle("Log In")
 
         self.mainBox= QDialogButtonBox(Dialog)
         self.mainBox.setObjectName(u"buttonBox")
@@ -108,7 +107,7 @@ class LoginFailed(QDialog):
 
     def wrong_password(self): self.fail_label.setText("Wrong Password. Try again.")
 
-    def wrong_account(self): self.fail_label.setText("Id and password don't match. Try again.")
+    # def wrong_account(self): self.fail_label.setText("Id and password don't match. Try again.")
     def closeButtonClicked(self):
         self.close()
 
@@ -117,6 +116,7 @@ class LoginWindow(QDialog):
         super().__init__()
         self.ui= LoginDialog()
         self.ui.setupUi(self)
+        self.setWindowTitle("Log In")
 
         self.id= None
         self.password= None
@@ -133,21 +133,19 @@ class LoginWindow(QDialog):
     def setPassword(self, password): self.password= password
 
     def loginBtn_clicked(self):
-        if self.id== self.right_id and self.password== self.right_password:
-            login_Successful= LoginSuccessful()
-            login_Successful.exec_()
+        if self.id!= self.right_id and self.password!= self.right_password:
+            login_failed= LoginFailed()
+            login_failed.exec_()
+        elif self.id!= self.right_id:
+            login_failed= LoginFailed()
+            login_failed.wrong_id()
+            login_failed.exec_()
+        elif self.password!= self.right_password:
+            login_failed= LoginFailed()
+            login_failed.wrong_password()
+            login_failed.exec_()
         else:
-            if self.id!= self.right_id:
-                login_failed= LoginFailed()
-                login_failed.wrong_id()
-                login_failed.exec_()
-            elif self.password!= self.right_password:
-                login_failed= LoginFailed()
-                login_failed.wrong_password()
-                login_failed.exec_()
-            # else:
-            #     login_failed= LoginFailed()
-            #     login_failed.wrong_account()
-            #     login_failed.exec_()
+            login_successful= LoginSuccessful()
+            login_successful.exec_()
 
     def closeBtn_clicked(self): self.close()
