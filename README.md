@@ -27,3 +27,54 @@ mainwindow widget with Python, Python Qt
   - password hide/show
   - Sign up
   - Finding my account(Finding ID/Password)
+
+## Login_main
+
+![img.png](markdowns/img.png)
+
+small window for log in. User enters id and password. By using setEchomode- password is hided
+
+![img_1.png](markdowns/img_1.png)
+
+Right now I use right_id and right_password to see whether id, password or both values are wrong
+but later I'm planning to add the method to check the data from connected database server
+
+1. ui_login
+2. ui_login_main
+3. ui_main_login
+4. images
+
+- user login
+  - checks value to meet the right_id and right_password
+    - if not: LoginFailed
+      1. wrong id
+      2. wrong password
+      3. wrong try(both wrong)
+  - if the values right, LoginSuccessful
+  - LoginFailed and LoginSuccessful window pops up after Log In button pushed >> Button action event
+  
+### LoginSuccessful
+![img_2.png](markdowns/img_2.png)
+
+### LoginFailed
+1. Wrong Password
+
+![img_3.png](markdowns/img_3.png)
+
+2. Wrong Id
+
+![img_4.png](markdowns/img_4.png)
+
+3. Both Values Wrong
+
+![img_5.png](markdowns/img_5.png)
+
+- Function may be added later
+  - Hiding password>> Password hide and show
+  - merging LoginFailed and Successful into one method
+  - closing main Log In dialog after LoginSuccess window closed
+  - clear values of LineEdits in main Log In dialog after LoginFailed window closed
+    - wrong id>> clear id line edit
+    - wrong password>> clear password line edit
+    - both line edits clear
+  
