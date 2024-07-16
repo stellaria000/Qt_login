@@ -5,7 +5,8 @@ One main window and dialog
 User inputs the information on the dialog, the informations printed on the 
 mainwindow widget with Python, Python Qt
 
-![image](https://github.com/user-attachments/assets/ca998c15-1f1b-4436-9d19-f8e5e887268a)
+![화면 캡처 2024-07-16 143232](https://github.com/user-attachments/assets/23a6a633-783e-4215-94b5-2335fda894eb)
+
 
 > GUI would be like this- followed the code reference from: https://wikidocs.net/5249
 > 
