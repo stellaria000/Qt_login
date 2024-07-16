@@ -30,6 +30,7 @@ class LoginDialog(object):
         self.pw_label.setObjectName("pw_label")
         self.pw_label.setText("Password: ")
         self.pw_edit= QLineEdit(self.gridLayoutWidget)
+        self.pw_edit.setEchoMode(QLineEdit.Password)
         self.pw_edit.setObjectName("pw_edit")
 
         self.login_btn= QPushButton(self.gridLayoutWidget)
@@ -55,6 +56,46 @@ class LoginDialog(object):
         self.id_label.setText(QCoreApplication.translate("Dialog", u"ID: ", None))
         self.pw_label.setText(QCoreApplication.translate("Dialog", u"Password: ", None))
         self.close_btn.setText(QCoreApplication.translate("Dialog", u"Close", None))
+
+class LoginWindow(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.ui= LoginDialog()
+        self.ui.setupUi(self)
+        self.setWindowTitle("Log In")
+
+        self.id= None
+        self.password= None
+        self.right_id= 'test'
+        self.right_password= 'test'
+
+        self.ui.id_edit.textChanged.connect(self.setId)
+        self.ui.pw_edit.textChanged.connect(self.setPassword)
+        self.ui.login_btn.clicked.connect(self.loginBtn_clicked)
+        self.ui.close_btn.clicked.connect(self.closeBtn_clicked)
+
+    def setId(self, id): self.id= id
+
+    def setPassword(self, password): self.password= password
+
+    def loginBtn_clicked(self):
+        if self.id!= self.right_id and self.password!= self.right_password:
+            login_failed= LoginFailed()
+            login_failed.exec_()
+        else:
+            if self.id != self.right_id:
+                login_faild = LoginFailed()
+                login_faild.wrong_id()
+                login_faild.exec_()
+            elif self.password != self.right_password:
+                login_failed = LoginFailed()
+                login_failed.wrong_password()
+                login_failed.exec_()
+            else:
+                login_success= LoginSuccessful()
+                login_success.exec_()
+
+    def closeBtn_clicked(self): self.close()
 
 # New window pop-up when login successful
 class LoginSuccessful(QDialog):
@@ -113,44 +154,3 @@ class LoginFailed(QDialog):
 
     def closeButtonClicked(self):
         self.close()
-
-class LoginWindow(QDialog):
-    def __init__(self):
-        super().__init__()
-        self.ui= LoginDialog()
-        self.ui.setupUi(self)
-        self.setWindowTitle("Log In")
-
-        self.id= None
-        self.password= None
-        self.right_id= 'test'
-        self.right_password= 'test'
-
-        self.ui.id_edit.textChanged.connect(self.setId)
-        self.ui.pw_edit.textChanged.connect(self.setPassword)
-        self.ui.login_btn.clicked.connect(self.loginBtn_clicked)
-        self.ui.close_btn.clicked.connect(self.closeBtn_clicked)
-
-    def setId(self, id): self.id= id
-
-    def setPassword(self, password): self.password= password
-
-    def loginBtn_clicked(self):
-        if self.id!= self.right_id and self.password!= self.right_password:
-            login_failed= LoginFailed()
-            login_failed.exec_()
-        else:
-            if self.id != self.right_id:
-                login_faild = LoginFailed()
-                login_faild.wrong_id()
-                login_faild.exec_()
-            elif self.password != self.right_password:
-                login_failed = LoginFailed()
-                login_failed.wrong_password()
-                login_failed.exec_()
-            else:
-                login_success= LoginSuccessful()
-                login_success.exec_()
-
-
-    def closeBtn_clicked(self): self.close()
