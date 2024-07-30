@@ -9,22 +9,27 @@ from PySide6.QtWidgets import (QAbstractButton, QApplication, QDialog, QDialogBu
     QGridLayout, QLabel, QLineEdit, QSizePolicy,
     QWidget)
 
+# Ui made by the Qt Designer
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
+
         Dialog.resize(300, 500)
+
         self.buttonBox = QDialogButtonBox(Dialog)
         self.buttonBox.setObjectName(u"buttonBox")
         self.buttonBox.setGeometry(QRect(30, 240, 341, 32))
         self.buttonBox.setOrientation(Qt.Orientation.Horizontal)
         self.buttonBox.setStandardButtons(QDialogButtonBox.StandardButton.Cancel|QDialogButtonBox.StandardButton.Ok)
+
         self.gridLayoutWidget = QWidget(Dialog)
         self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
         self.gridLayoutWidget.setGeometry(QRect(20, 60, 361, 111))
         self.gridLayout = QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
+
         self.lineEdit = QLineEdit(self.gridLayoutWidget)
         self.lineEdit.setObjectName(u"lineEdit")
 
@@ -44,7 +49,6 @@ class Ui_Dialog(object):
         self.lineEdit_2.setObjectName(u"lineEdit_2")
 
         self.gridLayout.addWidget(self.lineEdit_2, 1, 1, 1, 1)
-
 
         self.retranslateUi(Dialog)
         self.buttonBox.accepted.connect(Dialog.accept) #

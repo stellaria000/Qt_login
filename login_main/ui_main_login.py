@@ -1,6 +1,7 @@
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import QDialogButtonBox, QWidget, QGridLayout, QLabel, QLineEdit, QPushButton, QDialog, \
-    QVBoxLayout
+    QVBoxLayout, QMainWindow
+
 
 # MAIN DIALOGUE UI
 class LoginDialog(object):
@@ -58,6 +59,7 @@ class LoginDialog(object):
         self.pw_label.setText(QCoreApplication.translate("Dialog", u"Password: ", None))
         self.close_btn.setText(QCoreApplication.translate("Dialog", u"Close", None))
 
+# Functions for button action events, etc.
 class LoginWindow(QDialog):
     def __init__(self):
         super().__init__()
@@ -80,31 +82,22 @@ class LoginWindow(QDialog):
     def setPassword(self, password): self.password= password
 
     def loginBtn_clicked(self):
-        if self.id!= self.right_id and self.password!= self.right_password:
+        if self.id!= self.right_id or self.password!= self.right_password:
             login_failed= LoginMessageDialog("Login Failed. Try again.")
             login_failed.setWindowTitle("Login Failed")
-
-            self.ui.id_edit.clear()
-            self.ui.pw_edit.clear()
             login_failed.exec_()
-        else:
-            if self.id != self.right_id:
-                login_failed = LoginMessageDialog("Wrong id. Try again.")
-                login_failed.setWindowTitle("Login Failed")
-
+            if self.id != self.right_id and self.password!= self.right_password:
                 self.ui.id_edit.clear()
-                login_failed.exec_()
-            elif self.password != self.right_password:
-                login_failed = LoginMessageDialog("Wrong password. Try again.")
-                login_failed.setWindowTitle("Login Failed")
-
                 self.ui.pw_edit.clear()
-                login_failed.exec_()
-            else:
-                login_success= LoginMessageDialog("Login Successful.")
-                login_success.setWindowTitle("Login Successful")
-                login_success.exec_()
-                self.close()
+            elif self.password != self.right_password: self.ui.pw_edit.clear()
+            else: self.ui.id_edit.clear()
+
+        else: # close both dialogues when the id and password both is right
+            login_success= LoginMessageDialog("Login Successful.")
+            login_success.setWindowTitle("Login Successful")
+            login_success.exec_()
+            self.close()
+
     def closeBtn_clicked(self): self.close()
 
 # Pop-up window after Log In button pushed: Login result message dialog
@@ -131,61 +124,3 @@ class LoginMessageDialog(QDialog):
         self.msg_close_btn.clicked.connect(self.closeButtonClicked)
 
     def closeButtonClicked(self): self.close()
-
-# New window pop-up when login successful
-# class LoginSuccessful(QDialog):
-#     def __init__(self):
-#         super().__init__()
-#         self.setupUi()
-#
-#     def setupUi(self):
-#         self.resize(200, 100)
-#         self.setWindowTitle("Login Successful")
-#
-#         self.success_label= QLabel("Login successful")
-#         self.success_label.setObjectName(u"success_label")
-#         self.success_close_btn= QPushButton("Close")
-#         self.success_close_btn.setObjectName(u"success_close_btn")
-#
-#         success_layout= QGridLayout()
-#         success_layout.addWidget(self.success_label, 0, 0)
-#         success_layout.addWidget(self.success_close_btn, 1, 1)
-#         self.setLayout(success_layout)
-#
-#         self.success_close_btn.clicked.connect(self.closeButtonClicked)
-#
-#     def closeButtonClicked(self):
-#         self.close()
-#
-# # New window pop-up when login failed
-# class LoginFailed(QDialog):
-#
-#     def __init__(self):
-#         super().__init__()
-#         self.setupUi()
-#
-#     def setupUi(self):
-#         self.resize(200, 100)
-#         self.setWindowTitle("Login Failed")
-#
-#         self.fail_label = QLabel("Login failed. Try again.")
-#         self.fail_label.setObjectName(u"fail_label")
-#         self.fail_close_btn = QPushButton("Close")
-#         self.fail_close_btn.setObjectName(u"fail_close_btn")
-#
-#         fail_layout = QGridLayout()
-#         fail_layout.addWidget(self.fail_label, 0, 0)
-#         fail_layout.addWidget(self.fail_close_btn, 1, 1)
-#         self.setLayout(fail_layout)
-#
-#         self.fail_close_btn.clicked.connect(self.closeButtonClicked)
-#
-#     def wrong_id(self):
-#         self.fail_label.setText("Wrong Id. Try again.")
-#         return
-#     def wrong_password(self):
-#         self.fail_label.setText("Wrong Password. Try again.")
-#         return
-#
-#     def closeButtonClicked(self):
-#         self.close()

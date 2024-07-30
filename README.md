@@ -30,11 +30,11 @@ mainwindow widget with Python, Python Qt
 
 ## Login_main
 
-![img.png](markdowns/img.png)
+![img.png](images/img.png)
 
 small window for log in. User enters id and password. By using setEchomode- password is hided
 
-![img_1.png](markdowns/img_1.png)
+![img_1.png](images/img_1.png)
 
 Right now I use right_id and right_password to see whether id, password or both values are wrong
 but later I'm planning to add the method to check the data from connected database server
@@ -54,20 +54,20 @@ but later I'm planning to add the method to check the data from connected databa
   - LoginFailed and LoginSuccessful window pops up after Log In button pushed >> Button action event
   
 ### LoginSuccessful
-![img_2.png](markdowns/img_2.png)
+![img_2.png](images/img_2.png)
 
 ### LoginFailed
 1. Wrong Password
 
-![img_3.png](markdowns/img_3.png)
+![img_3.png](images/img_3.png)
 
 2. Wrong Id
 
-![img_4.png](markdowns/img_4.png)
+![img_4.png](images/img_4.png)
 
 3. Both Values Wrong
 
-![img_5.png](markdowns/img_5.png)
+![img_5.png](images/img_5.png)
 
 - Function may be added later
   - Hiding password>> Password hide and show
