@@ -7,7 +7,7 @@ import createdb
 from bookwindow import BookWindow
 from bookdelegate import BookDelegate
 
-class Book_window(QMainWindow, BookWindow): # A WINDOW TO SHOW THE BOKS AVAILABLE
+class Book_Window(QMainWindow, BookWindow): # A WINDOW TO SHOW THE BOKS AVAILABLE
     def __init__(self):
         super().__init__()
         self.setupUi(self)

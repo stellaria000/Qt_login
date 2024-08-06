@@ -8,12 +8,12 @@ import sys
 
 from PySide6.QtWidgets import QApplication
 
-from SQL_Books_Example.bookwindow import BookWindow
+from SQL_Books_Example.bookwindow import Book_Window
 
 if __name__== "__main__":
     app= QApplication([])
 
-    window= BookWindow()
+    window= Book_Window()
     window.resize(1000, 800)
     window.show()
 

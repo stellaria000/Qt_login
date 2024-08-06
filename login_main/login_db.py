@@ -40,6 +40,7 @@ def init_db():
     check(db.open)
 
     q= QSqlQuery()
+
     check(q.exec, ACCOUNTS_SQL)
     check(q.exec, SYSTEMS_SQL)
 

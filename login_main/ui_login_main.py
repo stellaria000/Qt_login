@@ -1,7 +1,7 @@
 import sys
 
 from PySide6.QtWidgets import QApplication
-from login_main.ui_main_login import LoginDialog, LoginWindow
+from login_main.ui_main_login import LoginWindow
 
 if __name__== "__main__":
     app= QApplication(sys.argv)
