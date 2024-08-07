@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QDialogButtonBox, QWidget, QGridLayout, QLabel, QL
     QVBoxLayout, QMainWindow, QHBoxLayout, QMessageBox, QComboBox, QCheckBox
 from login_db import init_db
 
+
 # MAIN DIALOGUE UI
 class LoginWindow(QDialog):
     def __init__(self):
@@ -26,7 +27,7 @@ class LoginWindow(QDialog):
         self.close_btn.clicked.connect(self.closeBtn_clicked)
 
     def setupUi(self):
-        self.setFixedSize(300, 200) # #343b48
+        self.setFixedSize(300, 200)  # #343b48
         self.setStyleSheet("background-color: #1b1e23")
 
         # MAIN LAYOUT CONTAINS OTHER BOXES
@@ -34,17 +35,16 @@ class LoginWindow(QDialog):
         mainLayout.setContentsMargins(20, 20, 20, 20)
         mainLayout.setSpacing(10)
 
-
         # SYSTEM BOX
-        system_box= QHBoxLayout()
+        system_box = QHBoxLayout()
         system_box.setSpacing(10)
 
-        self.sys_label= QLabel("System", self)
+        self.sys_label = QLabel("System", self)
         self.sys_label.setMinimumWidth(50)
         self.sys_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.sys_label.setStyleSheet("color: white")
 
-        self.sys_cbBox= QComboBox()
+        self.sys_cbBox = QComboBox()
         self.sys_cbBox.addItem("01_SECURITY")
         self.sys_cbBox.addItem("02_INTERSECTION")
         self.sys_cbBox.addItem("03_SCHOOLZONE")
@@ -85,10 +85,10 @@ class LoginWindow(QDialog):
         pw_box.addWidget(self.pw_edit)
 
         # LOGIN FUNCTION(ID SAVE, LOGIN COUNT)
-        function_box= QHBoxLayout()
+        function_box = QHBoxLayout()
         function_box.setSpacing(10)
 
-        self.idSave_chkBox= QCheckBox("Save Id")
+        self.idSave_chkBox = QCheckBox("Save Id")
         self.idSave_chkBox.setStyleSheet("color: white; font: 8pt")
 
         # LOGIN LABEL- REPLACING LOGIN MESSAGE DIALOG
@@ -96,7 +96,8 @@ class LoginWindow(QDialog):
         self.login_label.setStyleSheet("color: white; font: 12pt")
         self.login_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.login_failedCnt_label= QLabel(u"Login Failed: "+str(self.login_cnt) + "/5")
+        self.login_failedCnt_label = QLabel(u"Login Failed: " + str(self.login_cnt) + "/5")
+        self.login_failedCnt_label.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.login_failedCnt_label.setStyleSheet("color: white; font: 8pt")
 
         function_box.addWidget(self.idSave_chkBox)
@@ -172,26 +173,25 @@ class LoginWindow(QDialog):
             if not password_correct:
                 self.pw_edit.clear()
         '''
-        if not self.id or not self.password: # NO ID OR PW INPUT
+        if not self.id or not self.password:  # NO ID OR PW INPUT
             self.login_label.setText("Enter Id and Password Correctly")
 
-        elif self.id!= self.right_id or self.password!= self.right_password:
-            if self.id!= self.right_id: self.id_edit.clear()
-            if self.password!= self.right_password: self.pw_edit.clear()
+        elif self.id != self.right_id or self.password != self.right_password:
+            if self.id != self.right_id: self.id_edit.clear()
+            if self.password != self.right_password: self.pw_edit.clear()
             self.login_label.setText("Login Failed. Try Again")
-            self.login_failCnt()    # METHOD CALL
+            self.login_failCnt()  # METHOD CALL
 
         else:
             self.login_label.setText("Login Successful")
             self.accept()
 
     def login_failCnt(self):
-        self.login_cnt+= 1
-        self.login_failedCnt_label.setText(u"Login Failed: "+str(self.login_cnt) + "/5")
+        self.login_cnt += 1
+        self.login_failedCnt_label.setText(u"Login Failed: " + str(self.login_cnt) + "/5")
 
-        #if self.login_cnt>= 5:
+        # if self.login_cnt>= 5:
 
-        
     def closeBtn_clicked(self):
         self.close()
 
@@ -201,11 +201,11 @@ class LoginWindow(QDialog):
         msgBox.setText(message)
         msgBox.exec_()
 
-# Pop-up window after Log In button pushed: Login result message dialog
+# POP-UP WINDOW AFTER LOGIN BUTTON PUSHED: LOGIN RESULT MESSAGE DIALOG
 class LoginMessageDialog(QDialog):
     def __init__(self, message):
         super().__init__()
-        self.message= message
+        self.message = message
         self.setupUi()
 
     def setupUi(self):
@@ -213,15 +213,15 @@ class LoginMessageDialog(QDialog):
         self.setWindowTitle("Login Message")
         self.setStyleSheet("background-color: #1b1e23")
 
-        self.message_label= QLabel(self.message)
+        self.message_label = QLabel(self.message)
         self.message_label.setObjectName("msg_label")
         self.message_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.message_label.setStyleSheet("color: #8a95aa")
-        self.msg_close_btn= QPushButton("Close")
+        self.msg_close_btn = QPushButton("Close")
         self.msg_close_btn.setObjectName("msg_close_btn")
         self.msg_close_btn.setStyleSheet("border-radius: 2px; background-color: #2c313c; color: #8a95aa")
 
-        msg_layout= QGridLayout()
+        msg_layout = QGridLayout()
         msg_layout.addWidget(self.message_label, 0, 0)
         msg_layout.addWidget(self.msg_close_btn, 1, 1)
         self.setLayout(msg_layout)
