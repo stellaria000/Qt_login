@@ -3,9 +3,9 @@ from sqlalchemy import func
 
 ACCOUNTS_SQL= """
                 CREATE TABLE ACCOUNTS
-                (ID VARCHAR PRIMARY KEY, 
-                PASSWORD INTEGER
-                )
+                (SYS_ID INTEGER, 
+                ID VARCHAR PRIMARY KEY, 
+                PASSWORD INTEGER)
              """
 
 SYSTEMS_SQL= """
@@ -15,7 +15,12 @@ SYSTEMS_SQL= """
                 )
              """
 
-INSERT_ACCOUNT_SQL= """INSERT INTO ACCOUNTS(ID, PASSWORD) VALUES (?, ?)"""
+INSERT_ACCOUNT_SQL= """
+                        INSERT INTO ACCOUNTS(SYS_ID, ID, PASSWORD)
+                        SELECT S.SYS_ID, ?, ?
+                        FROM SYSTEMS_SQL
+                        WHERE S.SYS_ID= ?;
+                    """
 
 INSERT_SYSTEM_SQL= """INSERT INTO SYSTEMS(SYS_ID, SYS_NAME) VALUES (?, ?)"""
 
@@ -44,15 +49,15 @@ def init_db():
     check(q.exec, ACCOUNTS_SQL)
     check(q.exec, SYSTEMS_SQL)
 
-    add_system(q, 1, "intersection")
-    add_system(q, 2, "schoolzone")
-    add_system(q, 3, "security")
+    add_system(q, 1, "security")
+    add_system(q, 2, "intersection")
+    add_system(q, 3, "schoolzone")
     add_system(q, 4, "left_turn")
 
     add_account(q, "administrator", 1234)
+    add_account(q, "sec", 1234)
     add_account(q, "its", 1234)
     add_account(q, "sch", 1234)
-    add_account(q, "sec", 1234)
     add_account(q, "lft", 1234)
 
     return db
