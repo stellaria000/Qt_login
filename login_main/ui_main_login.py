@@ -15,7 +15,7 @@ class LoginWindow(QDialog):
         self.setWindowTitle("Log In")
 
         # INITIALIZE DATABASE CONNEXTION(EXAMPLE: REPLACE W/ YOUR ACTUAL INITIALIZATION)
-        self.db = init_db()
+        # self.db = init_db()
         self.id = None
         self.password = None
         self.right_id = 'test'
@@ -27,7 +27,7 @@ class LoginWindow(QDialog):
         self.close_btn.clicked.connect(self.closeBtn_clicked)
 
     def setupUi(self):
-        self.setFixedSize(300, 200)  # #343b48
+        self.setFixedSize(300, 200)  #  #1b1e23
         self.setStyleSheet("background-color: #1b1e23")
 
         # MAIN LAYOUT CONTAINS OTHER BOXES
@@ -108,6 +108,7 @@ class LoginWindow(QDialog):
         button_box.setSpacing(10)
 
         self.login_btn = QPushButton("Log In", self)
+        # self.login_btn.setEnabled(False)
         self.login_btn.setStyleSheet("border-radius: 2px; background-color: #2c313c; color: #8a95aa")
 
         self.close_btn = QPushButton("Close", self)
@@ -175,7 +176,7 @@ class LoginWindow(QDialog):
         '''
         if not self.id or not self.password:  # NO ID OR PW INPUT
             self.login_label.setText("Enter Id and Password Correctly")
-
+            # self.login_btn.setEnabled(False)
         elif self.id != self.right_id or self.password != self.right_password:
             if self.id != self.right_id: self.id_edit.clear()
             if self.password != self.right_password: self.pw_edit.clear()
@@ -190,17 +191,24 @@ class LoginWindow(QDialog):
         self.login_cnt += 1
         self.login_failedCnt_label.setText(u"Login Failed: " + str(self.login_cnt) + "/5")
 
-        # if self.login_cnt>= 5:
+        if self.login_cnt>= 5:
+            self.login_failed_msgBox= LoginMessageDialog("You failed to log in five times. Quit the program.")
+            self.login_failed_msgBox.setWindowTitle("Quit program")
+            # LoginMessageDialog.message= 
+            self.login_failed_msgBox.exec()
+
+            self.close()
 
     def closeBtn_clicked(self):
         self.close()
 
+'''
     def showMessage(self, title, message):
         msgBox = QMessageBox()
         msgBox.setWindowTitle(title)
         msgBox.setText(message)
         msgBox.exec_()
-
+'''
 # POP-UP WINDOW AFTER LOGIN BUTTON PUSHED: LOGIN RESULT MESSAGE DIALOG
 class LoginMessageDialog(QDialog):
     def __init__(self, message):

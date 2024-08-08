@@ -54,10 +54,10 @@ def init_db():
     add_system(q, 3, "schoolzone")
     add_system(q, 4, "left_turn")
 
-    add_account(q, "administrator", 1234)
-    add_account(q, "sec", 1234)
-    add_account(q, "its", 1234)
-    add_account(q, "sch", 1234)
-    add_account(q, "lft", 1234)
+    add_account(q, 0, "administrator", 1234)
+    add_account(q, 1, "sec", 1234)
+    add_account(q, 2, "its", 1234)
+    add_account(q, 3, "sch", 1234)
+    add_account(q, 4, "lft", 1234)
 
     return db
