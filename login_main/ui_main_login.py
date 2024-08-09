@@ -10,12 +10,13 @@ from login_db import init_db
 class LoginWindow(QDialog):
     def __init__(self):
         super().__init__()
-        self.login_cnt = 0
         self.setupUi()
         self.setWindowTitle("Log In")
 
-        # INITIALIZE DATABASE CONNEXTION(EXAMPLE: REPLACE W/ YOUR ACTUAL INITIALIZATION)
+        # CONNECT TO DATABASE
         # self.db = init_db()
+        # self.query= QSqlQuery(self.db)
+
         self.id = None
         self.password = None
         self.right_id = 'test'
@@ -96,6 +97,7 @@ class LoginWindow(QDialog):
         self.login_label.setStyleSheet("color: white; font: 12pt")
         self.login_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        self.login_cnt= 0
         self.login_failedCnt_label = QLabel(u"Login Failed: " + str(self.login_cnt) + "/5")
         self.login_failedCnt_label.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.login_failedCnt_label.setStyleSheet("color: white; font: 8pt")

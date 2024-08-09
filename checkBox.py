@@ -26,3 +26,12 @@ if __name__== '__main__':
     ex= MyApp()
     sys.exit(app.exec())
 
+'''
+    isChecked(): return the state of current Checkbox, True or False
+    checkState(): return the state of checkBox
+    toggle(): change the state of the checkBox
+'''
+
+''' # signals
+    pressed, released, clicked, stateChanged()
+'''
