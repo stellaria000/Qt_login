@@ -71,11 +71,9 @@ INSERT INTO ACCOUNTS(SYS_ID, ID) VALUES
 (2, "ITS"), 
 (2, "INTERSECTION"), 
 (2, "INTSEC"), 
-
 (3, "SCH"), 
 (3, "SCHOOLZONE"), 
 (3, "SZONE"), 
-
 (4, "LFT"), 
 (4, "LEFT_TURN"), 
 (4, "LTURN"),

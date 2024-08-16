@@ -32,6 +32,8 @@ mainwindow widget with Python, Python Qt
 ### Current Dialog
 ![alt text](image.png)
 
+~~import code removed~~
+
 #### Connected to Database Successfully
 related code is not included in this repository
 
