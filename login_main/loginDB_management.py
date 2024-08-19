@@ -1,4 +1,4 @@
-class LoginDB_management(BaseDBManagement):
+class AccountDBManagement(BaseDBManagement):
   def __init__(self, db_host, db_port, db_table, db_user, db_pw):
     self.db_host= db_host
     self.db_port= db_port
@@ -16,7 +16,7 @@ class LoginDB_management(BaseDBManagement):
         self.connectionStatus = False
             
   def create(self, dataFrame):
-    new_account= AccountDB(id= dataFrame.id, sys_id= dataFrame.sys_id, password= dataFrame.password)
+    new_account= AccountDB(id= dataFrame.id, account_package_list= dataFrame.account_package_list, password= dataFrame.password)
     with self.DBSession() as session:
       try:
         session.add(new_account)
@@ -30,7 +30,7 @@ class LoginDB_management(BaseDBManagement):
       dataFrames= session.scalars(select(AccountDB)) 
       database= {"account": []}
       for account in dataFrames:
-        accountEntry= {"id": account.id, "sys_id": account.sys_id, "password": account.password}
+        accountEntry= {"id": account.id, "account_package_list": account.account_package_list, "password": account.password}
         database["account"].append(accountEntry)
       return database
     
@@ -41,7 +41,7 @@ class LoginDB_management(BaseDBManagement):
     
     if db_account:
       db_account.id= dataFrame.id
-      db_account.sys_id= dataFrame.sys_id
+      db_account.account_package_list= dataFrame.account_package_list
       
   def delete(self, idx):
     with self.DBSession() as session:
@@ -56,7 +56,7 @@ class LoginDB_management(BaseDBManagement):
         session.rollback()
         print(f"An error Occurred: {e}")
 
-class SystemDB_management(BaseDBManagement):
+class SystemDBManagement(BaseDBManagement):
   def __init__(self, db_host, db_port, db_table, db_user, db_pw):
     self.db_host= db_host
     self.db_port= db_port
@@ -104,15 +104,3 @@ class SystemDB_management(BaseDBManagement):
       except Exception as e:
         session.rollback()  
         print(f"An error Occurred: {e}")
-# login DB structures
-
-class AccountDB(Base):
-  __tablename__= "ACCOUNTS"
-  id= Column('ID', String(255), primary_key= True, autoincrement= False)
-  sys_id= Column('SYS_ID', Integer, nullable= False)
-  password= Column('PASSWORD', Integer, nullable= False)
-  
-class SystemDB(Base):
-  __tablename__= "SYSTEMS"
-  sys_id= Column('SYS_ID', Integer, primary_key= True, autoincrement= True)
-  sys_name= Column('SYS_NAME', String(255), nullable= False)
