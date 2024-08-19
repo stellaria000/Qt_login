@@ -1,12 +1,18 @@
-import sys
-
-from PySide6.QtWidgets import QApplication
-from ui_main_login import LoginWindow
-
-
-if __name__== "__main__":
-    app= QApplication(sys.argv)
-    window= LoginWindow()
+if __name__ == "__main__":
+    # APPLICATION
+    # ///////////////////////////////////////////////////////////////
+    app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon("PREVAX2.ico"))
+ 
+    window= MainWindow()
+    window.setEnabled(False)
     window.show()
+    login_window= LoginWindow()
+    # login_window.exec()
 
-    app.exec_()
+    if login_window.exec() == QDialog.Rejected:
+        window.setEnabled(True)
+    else:
+        sys.exit(0)
+
+    sys.exit(app.exec())
