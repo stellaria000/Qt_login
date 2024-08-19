@@ -14,25 +14,34 @@ import os
 
 class LoginWindow(PyDialog):
     def __init__(self):
-        super().__init__(None, message= "로그인이 필요합니다.")
-        # CONNECTING TO THE DATABASE
-        self.DBManager= None
-        #  SETTING INI FILE PATH
+        # FILE MANAGER- SETTING INI FILE PATH
         self.ini_file_path= "D:\Project\gui" 
         self.config= configparser.ConfigParser()
         self.ini_file= os.path.join(self.ini_file_path, 'Login_info.ini')
+
+        super().__init__(None, message= "로그인이 필요합니다.")
         self.setupUi()
         self.setFixedSize(self.sizeHint())
+
+        # CONNECTING TO THE DATABASE
+        self.accDBManager = AccountDBManagement(self.settings["database_info"]["host"], 
+                                             self.settings["database_info"]["port"],
+                                             self.settings["database_info"]["name"],
+                                             self.settings["database_info"]["user"], 
+                                             self.settings["database_info"]["pw"])
+        self.systemDBManager = SystemDBManagement(self.settings["database_info"]["host"], 
+                                                  self.settings["database_info"]["port"],
+                                                  self.settings["database_info"]["name"],
+                                                  self.settings["database_info"]["user"], 
+                                                  self.settings["database_info"]["pw"])
         self.load_login_info() # LOAD SAVED ID IF EXISTS
-        
+        self.load_systems() # LOAD SAVED SYSTEMS IF EXISTS& SAVES FOR COMBOBOX
+
     def setupUi(self):
         settings = Settings()
         self.settings = settings.items
         themes = Themes()
         self.themes = themes.items
-        self.DBManager= AccountDBManagement(self.settings["database_info"]["host"], self.settings["database_info"]["port"],
-                                            self.settings["database_info"]["name"],
-                                            self.settings["database_info"]["user"], self.settings["database_info"]["pw"])
 
         self.id = None
         self.password = None
@@ -60,10 +69,10 @@ class LoginWindow(PyDialog):
             name= "system", default_text= "system", radius= 4,  
             bg_color= self.themes["app_color"]["dark_two"]
         )
-        self.sys_cbBox.addItem("01_SECURITY")
-        self.sys_cbBox.addItem("02_INTERSECTION")
-        self.sys_cbBox.addItem("03_SCHOOLZONE")
-        self.sys_cbBox.addItem("04_LEFT TURN")
+        # self.sys_cbBox.addItem("01_SECURITY")
+        # self.sys_cbBox.addItem("02_INTERSECTION")
+        # self.sys_cbBox.addItem("03_SCHOOLZONE")
+        # self.sys_cbBox.addItem("04_LEFT TURN")
         self.sys_cbBox.setMaximumHeight(30)
         self.sys_cbBox.setMaximumWidth(250)
         self.sys_cbBox.setStyleSheet(f"color: {self.themes["app_color"]["text_foreground"]};background-color: {self.themes["app_color"]["dark_two"]};"
@@ -220,13 +229,13 @@ class LoginWindow(PyDialog):
             return
         
         selected_system= self.sys_cbBox.currentText()
-        sys_id= self.get_sys_id(selected_system)
+        sys_id= selected_system.split("_")[0] # self.load_systems(selected_system)
         if not sys_id: 
             self.login_label.setText("System id could not be determined.")
             return
         
         try:    # CHECKS ACCOUNTS IN DATABASE
-            accounts= self.DBManager.readAllData()["account"]
+            accounts= self.accDBManager.readAllData()["account"]
             if "_" in selected_system:            
                 login_successful= False
         except Exception as e:
@@ -261,6 +270,16 @@ class LoginWindow(PyDialog):
             self.login_btn.setEnabled(False)
             # self.close()
 
+    def load_systems(self): # LOAD THE SAVED SYSTEM INFORMATION FROM DATABASE
+        try:
+            systems= self.systemDBManager.readAllData()
+            system_list= systems.get("system", [])
+            for system in system_list:
+                sys_id= system.get("sys_id", "")
+                sys_name= system.get("sys_name", "")
+                self.sys_cbBox.addItem(f"{sys_id}_{sys_name}")
+        except Exception as e: print(f"Error loading systems: {e}")
+
     def load_login_info(self):
         # LOAD THE SAVED ID FROM TEH INI FILE IF THE 'idSave_chkBox' WAS CHECKED
         if os.path.exists(self.ini_file):
@@ -270,10 +289,6 @@ class LoginWindow(PyDialog):
                 self.id_edit.setText(saved_id) # SET THE SAVED ID TO THE QLINEEDIT
                 self.idSave_chkBox.setChecked(True)
                 self.id= saved_id
-
-    def get_sys_id(self, sys_name):
-        sys_map= {"01_SECURITY": "1", "02_INTERSECTION": "2", "03_SCHOOLZONE": "3", "04_LEFT TURN": "4"}
-        return sys_map.get(sys_name, None)
 
     def chkBox_stateChange(self, state):
         '''READS INI FILE TO CHECK IF THERE'S WRITTEN ID, 
