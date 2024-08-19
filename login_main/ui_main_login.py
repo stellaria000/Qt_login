@@ -205,6 +205,8 @@ class LoginWindow(PyDialog):
         self.login_btn.setText(QCoreApplication.translate("Dialog", u"로그인", None))
         self.close_btn.setText(QCoreApplication.translate("Dialog", u"닫기", None))
 
+    # METHODSSSSSSS
+
     def setId(self, id): 
         self.id = self.id_edit.text().strip()
         if self.idSave_chkBox.isChecked(): self.updateIniFile()
@@ -216,33 +218,41 @@ class LoginWindow(PyDialog):
             self.login_label.setText("Enter Id and Password Correctly")
             # self.login_btn.setEnabled(False)
             return
-        try:
-            selected_system= self.sys_cbBox.currentText()
-            if "_" in selected_system:
-                sys_id_str, sys_name= selected_system.split("_", 1)
-                sys_id= int(sys_id_str)
-
-                accounts= self.DBManager.readAllData()["account"]
+        
+        selected_system= self.sys_cbBox.currentText()
+        sys_id= self.get_sys_id(selected_system)
+        if not sys_id: 
+            self.login_label.setText("System id could not be determined.")
+            return
+        
+        try:    # CHECKS ACCOUNTS IN DATABASE
+            accounts= self.DBManager.readAllData()["account"]
+            if "_" in selected_system:            
                 login_successful= False
-
-                for account in accounts:
-                    if account["sys_id"]== sys_id and account["id"]== self.id and account["password"]== self.password:
-                        self.login_label.setText("Login Successful")
-                        self.accept()
-                        login_successful= True
-                        break
-
-                if not login_successful:
-                    self.login_label.setText("Login Failed. Try Again")
-                    self.login_failCnt()  # METHOD CALL
-            else: self.login_label.setText("Invalid System Format Selected")
         except Exception as e:
             self.login_label.setText("Error reading data from database.")
             print(f"Error: {e}")
-            return    
+            return
+        
+        login_successful= False
+        for account in accounts:    # SPLIT PACKAGE LISTS BY ','
+            package_list_split= account["account_package_list"].split(',')
+            package_list_split= [pkg.strip() for pkg in package_list_split] # REMOVES BLANK
+
+            # print('package_list_split= ', package_list_split)
+            if sys_id in package_list_split and account["id"]== self.id and account["password"]== self.password:
+                self.login_label.setText("Login Successful")
+                self.accept()
+                login_successful= True
+                break
+
+        if not login_successful:
+            self.login_label.setText("Login Failed. Try Again")
+            self.login_failCnt()  # METHOD CALL
+            
 
     def login_failCnt(self):
-        self.login_cnt += 1
+        self.login_cnt += 1  
         self.login_failedCnt_label.setText(u"Login Failed: " + str(self.login_cnt) + "/5")
 
         if self.login_cnt>= 5:
@@ -260,6 +270,10 @@ class LoginWindow(PyDialog):
                 self.id_edit.setText(saved_id) # SET THE SAVED ID TO THE QLINEEDIT
                 self.idSave_chkBox.setChecked(True)
                 self.id= saved_id
+
+    def get_sys_id(self, sys_name):
+        sys_map= {"01_SECURITY": "1", "02_INTERSECTION": "2", "03_SCHOOLZONE": "3", "04_LEFT TURN": "4"}
+        return sys_map.get(sys_name, None)
 
     def chkBox_stateChange(self, state):
         '''READS INI FILE TO CHECK IF THERE'S WRITTEN ID, 
@@ -285,7 +299,5 @@ class LoginWindow(PyDialog):
             with open(self.ini_file, 'w') as configfile:
                 self.config.write(configfile)
 
-    def system_checked(self):
-        seleclted_system= self.sys_cbBox.currentText()
-
     def closeBtn_clicked(self): self.reject()
+        
